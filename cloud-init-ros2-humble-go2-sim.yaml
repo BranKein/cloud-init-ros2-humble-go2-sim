@@ -2,7 +2,7 @@
 apt:
   sources:
     ros2:
-      source: "deb http://repo.ros2.org/ubuntu/main $RELEASE main"
+      source: "deb http://repo.ros2.org/ubuntu/main jammy main"
       keyid: C1CF 6E31 E6BA DE88 68B1 72B4 F42E D6FB AB17 C654
 
 package_upgrade: true
@@ -29,6 +29,15 @@ packages:
 - python3-setuptools
 - python3-vcstool
 - ros-humble-desktop-full
+# Additional packages for go2 simulation
+- ros-humble-gazebo-ros2-control
+- ros-humble-xacro
+- ros-humble-robot-localization
+- ros-humble-ros2-controllers
+- ros-humble-ros2-control
+- ros-humble-velodyne
+- ros-humble-velodyne-gazebo-plugins
+- ros-humble-velodyne-description
 
 snap:
   commands:
@@ -49,6 +58,9 @@ write_files:
     if [ -f /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash ]; then
       source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
     fi
+    
+    alias source-ros='source /opt/ros/humble/setup.bash'
+    alias go2-sim='source /opt/ros/humble/setup.bash && cd ~/go2_sim_ws && source install/setup.bash && ros2 launch go2_config gazebo_velodyne.launch.py rviz:=true'
   path: /home/ubuntu/.bashrc
   append: true
   defer: true
@@ -58,5 +70,12 @@ runcmd:
   # Initialise rosdep
   rosdep init
   sudo -u ubuntu sh -c "rosdep update --rosdistro humble"
+  sudo -u ubuntu sh -c "mkdir -p /home/ubuntu/go2_sim_ws/src"
+  cd /home/ubuntu/go2_sim_ws/src
+  sudo -u ubuntu sh -c "git clone https://github.com/anujjain-dev/unitree-go2-ros2.git"
+  cd /home/ubuntu/go2_sim_ws
+  sudo -u ubuntu sh -c "rosdep install --from-paths src --ignore-src -r -y"
+  
+  sudo -u ubuntu sh -c "colcon build"
 
 final_message: "The ROS 2 Humble environment is up, after $UPTIME seconds."
