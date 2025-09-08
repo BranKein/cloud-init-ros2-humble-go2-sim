@@ -75,7 +75,5 @@ runcmd:
   sudo -u ubuntu sh -c "git clone https://github.com/anujjain-dev/unitree-go2-ros2.git"
   cd /home/ubuntu/go2_sim_ws
   sudo -u ubuntu sh -c "rosdep install --from-paths src --ignore-src -r -y"
-  
-  sudo -u ubuntu sh -c "colcon build"
 
 final_message: "The ROS 2 Humble environment is up, after $UPTIME seconds."
