@@ -49,6 +49,8 @@ write_files:
     if [ -f /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash ]; then
       source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
     fi
+    
+    alias husky-sim='source /opt/ros/humble/setup.bash && source /home/ubuntu/clearpath/setup.bash && ros2 launch clearpath_gz simulation.launch.py'
   path: /home/ubuntu/.bashrc
   append: true
   defer: true
@@ -58,5 +60,14 @@ runcmd:
   # Initialise rosdep
   rosdep init
   sudo -u ubuntu sh -c "rosdep update --rosdistro humble"
+  sudo -u ubuntu sh -c "wget https://packages.clearpathrobotics.com/public.key -O - | sudo apt-key add -"
+  echo \
+    "deb https://packages.clearpathrobotics.com/stable/ubuntu humble main" > \
+    /etc/apt/sources.list.d/clearpath-latest.list
+  apt-get update
+  wget \
+    https://raw.githubusercontent.com/clearpathrobotics/public-rosdistro/master/rosdep/50-clearpath.list \
+    -O /etc/ros/rosdep/sources.list.d/50-clearpath.list
+  apt-get update
 
 final_message: "The ROS 2 Humble environment is up, after $UPTIME seconds."
