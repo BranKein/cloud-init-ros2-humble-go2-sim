@@ -9,6 +9,9 @@ sudo snap install remmina
 
 # 우분투 22.04 LTS (Jammy Jellyfish) 인스턴스 생성
 ```bash
+cd ~
+git clone https://github.com/BranKein/cloud-init-ros2-humble-husky-sim.git
+cd cloud-init-ros2-humble-husky-sim
 # cloud-init-ros2-humble-go2-sim 폴더에서
 multipass launch 22.04 -n husky-sim -c 4 -m 8G -d 50G --cloud-init cloud-init-ros2-humble.yaml --timeout 300
 ```
@@ -117,5 +120,4 @@ chmod +x fetch_webrtc_source.sh
 ```
 해당 작업은 짧으면 10분, 길면 40분 이상도 걸리는 작업이므로 중간에 절대로 터미널을 끄거나 하지 말아주세요.
 
-
-
+# 
